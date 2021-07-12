@@ -7,8 +7,8 @@ class App extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: appName,
       debugShowCheckedModeBanner: false,
+      title: appName,
       theme: theme,
       routes: {
         '/': (BuildContext context) => HomeScreen(),
