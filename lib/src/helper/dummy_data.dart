@@ -1,7 +1,7 @@
-List<Map<String, dynamic>> list = [
+List<Map<String, dynamic>> dummyChecklist = [
   {
     "id": "askssd122",
-    "title": "CheckList 1",
+    "title": "Pre-flight",
     "description": "this is a demo description.",
     "checkpoints": [
       "Turn on the controller",
@@ -11,8 +11,8 @@ List<Map<String, dynamic>> list = [
   },
   {
     "id": "askssd232j",
-    "title": "CheckList 2",
-    "description": "sunny2@email.com",
+    "title": "Mission Planning",
+    "description": "this is a demo description.",
     "checkpoints": [
       "Turn on the controller",
       "check for sound and aviation",
@@ -21,8 +21,8 @@ List<Map<String, dynamic>> list = [
   },
   {
     "id": "askssd111",
-    "title": "CheckList 3",
-    "description": "sunny3@email.com",
+    "title": "Take-off",
+    "description": "this is a demo description.",
     "checkpoints": [
       "Turn on the controller",
       "check for sound and aviation",
@@ -31,8 +31,8 @@ List<Map<String, dynamic>> list = [
   },
   {
     "id": "ask1223122",
-    "title": "CheckList 4",
-    "description": "sunny4@email.com",
+    "title": "THru-flight",
+    "description": "this is a demo description.",
     "checkpoints": [
       "Turn on the controller",
       "check for sound and aviation",
@@ -41,9 +41,9 @@ List<Map<String, dynamic>> list = [
   },
   {
     "id": "asksas22",
-    "title": "Sunny Dhama5",
-    "description": "sunny5@email.com",
-    "checkpoints": "1"
+    "title": "Post-flight",
+    "description": "this is a demo description.",
+    "checkpoints": []
   },
 ];
 
@@ -58,33 +58,6 @@ List<Map<String, dynamic>> titles = [
     "id": "assdfssd122",
     "name": "Sunny Dhama 2",
     "email": "sunny2@email.com",
-    "picUrl": "",
-  },
-];
-
-List<Map<String, dynamic>> interviewees = [
-  {
-    "id": "askssd122",
-    "name": "Saarthak Gupta",
-    "email": "saarthak@email.com",
-    "picUrl": "",
-  },
-  {
-    "id": "assdfssd122",
-    "name": "Prashant Kumar",
-    "email": "prashant@email.com",
-    "picUrl": "",
-  },
-  {
-    "id": "askssd122",
-    "name": "Rajneesh Sharma",
-    "email": "rajneesh@email.com",
-    "picUrl": "",
-  },
-  {
-    "id": "assdfssd122",
-    "name": "Bhanu Pratap",
-    "email": "bhanu@email.com",
     "picUrl": "",
   },
 ];

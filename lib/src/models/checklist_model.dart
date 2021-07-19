@@ -2,7 +2,7 @@ class CheckList {
   String id = "";
   String title = "";
   String description = "";
-  List<String> checkpoints = [];
+  List<dynamic> checkpoints = [];
 
   get getid => this.id;
   set setid(value) => this.id = value;
