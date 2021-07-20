@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:drone_assist/src/screens/new_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_tts/flutter_tts.dart';
 import 'package:flutter/foundation.dart' show kIsWeb;
@@ -209,7 +210,13 @@ class _TTSScreenState extends State<TTSScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
         floatingActionButton: FloatingActionButton(
-          onPressed: listenSpeech,
+          onPressed: () {
+            Navigator.of(context).push(MaterialPageRoute(
+              builder: (context) {
+                return NewPage();
+              },
+            ));
+          },
         ),
         appBar: AppBar(
           title: Text('Flutter TTS'),
@@ -221,7 +228,7 @@ class _TTSScreenState extends State<TTSScreen> {
               _btnSection(),
               _engineSection(),
               _futureBuilder(),
-              // _buildSliders()
+              _buildSliders()
             ])));
   }
 
@@ -331,49 +338,49 @@ class _TTSScreenState extends State<TTSScreen> {
         ]);
   }
 
-  // Widget _buildSliders() {
-  //   return Column(
-  //     children: [_volume(), _pitch(), _rate()],
-  //   );
-  // }
+  Widget _buildSliders() {
+    return Column(
+      children: [_volume(), _pitch(), _rate()],
+    );
+  }
 
-  // Widget _volume() {
-  //   return Slider(
-  //       value: volume,
-  //       onChanged: (newVolume) {
-  //         setState(() => volume = newVolume);
-  //       },
-  //       min: 0.0,
-  //       max: 1.0,
-  //       divisions: 10,
-  //       label: "Volume: $volume");
-  // }
+  Widget _volume() {
+    return Slider(
+        value: volume,
+        onChanged: (newVolume) {
+          setState(() => volume = newVolume);
+        },
+        min: 0.0,
+        max: 1.0,
+        divisions: 10,
+        label: "Volume: $volume");
+  }
 
-  // Widget _pitch() {
-  //   return Slider(
-  //     value: pitch,
-  //     onChanged: (newPitch) {
-  //       setState(() => pitch = newPitch);
-  //     },
-  //     min: 0.5,
-  //     max: 2.0,
-  //     divisions: 15,
-  //     label: "Pitch: $pitch",
-  //     activeColor: Colors.red,
-  //   );
-  // }
+  Widget _pitch() {
+    return Slider(
+      value: pitch,
+      onChanged: (newPitch) {
+        setState(() => pitch = newPitch);
+      },
+      min: 0.5,
+      max: 2.0,
+      divisions: 15,
+      label: "Pitch: $pitch",
+      activeColor: Colors.red,
+    );
+  }
 
-  // Widget _rate() {
-  //   return Slider(
-  //     value: rate,
-  //     onChanged: (newRate) {
-  //       setState(() => rate = newRate);
-  //     },
-  //     min: 0.0,
-  //     max: 1.0,
-  //     divisions: 10,
-  //     label: "Rate: $rate",
-  //     activeColor: Colors.green,
-  //   );
-  // }
+  Widget _rate() {
+    return Slider(
+      value: rate,
+      onChanged: (newRate) {
+        setState(() => rate = newRate);
+      },
+      min: 0.0,
+      max: 1.0,
+      divisions: 10,
+      label: "Rate: $rate",
+      activeColor: Colors.green,
+    );
+  }
 }

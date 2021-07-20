@@ -1,6 +1,7 @@
 import 'package:drone_assist/src/dialogs/delete_dialog.dart';
 import 'package:drone_assist/src/helper/dimensions.dart';
 import 'package:drone_assist/src/models/checklist_model.dart';
+import 'package:drone_assist/src/screens/tts_screen.dart';
 import 'package:flutter/material.dart';
 
 class CheckListScreen extends StatefulWidget {
@@ -105,9 +106,14 @@ class _CheckListScreenState extends State<CheckListScreen> {
                   right: 10,
                   child: OutlinedButton(
                       onPressed: () {
-                        print("Button pressed");
-                        start.value = true;
-                        currIndex.value = currIndex.value + 1;
+                        Navigator.of(context).push(MaterialPageRoute(
+                          builder: (context) {
+                            return TTSScreen();
+                          },
+                        ));
+                        // print("Button pressed");
+                        // start.value = true;
+                        // currIndex.value = currIndex.value + 1;
                       },
                       child: Text(start.value ? "Resume" : "Start"))),
             ),
