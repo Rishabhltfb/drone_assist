@@ -17,6 +17,10 @@ dependencies:
   flutter_tts: ^3.1.0
   speech_to_text: ^4.2.2
   flutter_svg: ^0.21.0+1
+  provider:
+  firebase_auth: 
+  cloud_firestore: 
+  google_sign_in: 
 
 dev_dependencies:
   flutter_test:

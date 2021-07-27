@@ -4,19 +4,24 @@ class CheckList {
   String description = "";
   List<dynamic> checkpoints = [];
 
-  get getid => this.id;
-  set setid(value) => this.id = value;
+  CheckList({
+    this.id = "",
+    this.title = "",
+    this.description = "",
+    this.checkpoints = const [],
+  });
 
-  get gettitle => this.title;
-  set settitle(value) => this.title = value;
+  Map toMap(CheckList checkList) {
+    var data = Map<String, dynamic>();
+    data['id'] = checkList.id;
+    data['title'] = checkList.title;
+    data['description'] = checkList.description;
+    data["checkpoints"] = checkList.checkpoints;
 
-  get getdescription => this.description;
-  set setdescription(value) => this.description = value;
+    return data;
+  }
 
-  get getcheckpoints => this.checkpoints;
-  set setcheckpoints(value) => this.checkpoints = value;
-
-  CheckList.fromJSON(Map<String, dynamic> map) {
+  CheckList.fromMap(Map<String, dynamic> map) {
     try {
       this.id = map["id"];
       this.title = map["title"];
