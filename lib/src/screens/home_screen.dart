@@ -20,7 +20,7 @@ class _HomeScreenState extends State<HomeScreen> {
     vpW = getViewportWidth(context);
     List<CheckList> checkList = [];
     dummyChecklist.forEach((element) {
-      checkList.add(CheckList.fromJSON(element));
+      checkList.add(CheckList.fromMap(element));
     });
     return SafeArea(
       child: Scaffold(

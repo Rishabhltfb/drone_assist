@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "529904713733",
+    "project_id": "drone-assist",
+    "storage_bucket": "drone-assist.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:529904713733:android:9649629a986b1fa3d15c6c",
+        "android_client_info": {
+          "package_name": "com.example.drone_assist"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "529904713733-40kkcrnuelfchttg1c83ipf99012brkg.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.drone_assist",
+            "certificate_hash": "8834dfdd2d96e8eb0cdb84d2c9d82bed85d33601"
+          }
+        },
+        {
+          "client_id": "529904713733-ik7edmd80a2rqmsh7dqiga89o1o5s8qe.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDbfrOuqN7aeF62qd76Hc8dm-CZgX-zGEw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "529904713733-ik7edmd80a2rqmsh7dqiga89o1o5s8qe.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
