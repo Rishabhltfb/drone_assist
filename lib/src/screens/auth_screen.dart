@@ -29,28 +29,28 @@ class _AuthScreenState extends State<AuthScreen> {
         textColor: Colors.white,
         padding: EdgeInsets.symmetric(horizontal: 15.0, vertical: 12.0),
         onPressed: () async {
-          Navigator.of(context).pushReplacement(MaterialPageRoute(
-            builder: (context) {
-              return HomeScreen();
-            },
-          ));
-          // _isLoading.value = true;
-          // _auth.signInWithGoogle().then((user) {
-          //   Provider.of<UserProvider>(context, listen: false).setUser = user;
-          //   _isLoading.value = false;
-          //   if (user.name.isNotEmpty) {
-          //     Navigator.of(context).pushReplacement(MaterialPageRoute(
-          //       builder: (context) {
-          //         return HomeScreen();
-          //       },
-          //     ));
-          //     print("User is not null");
-          //   } else {
-          //     print("returned User has no name");
-          //   }
-          // }).catchError((onError) {
-          //   print("Error on Google Signin: $onError");
-          // });
+          // Navigator.of(context).pushReplacement(MaterialPageRoute(
+          //   builder: (context) {
+          //     return HomeScreen();
+          //   },
+          // ));
+          _isLoading.value = true;
+          _auth.signInWithGoogle().then((user) {
+            Provider.of<UserProvider>(context, listen: false).setUser = user;
+            _isLoading.value = false;
+            if (user.name.isNotEmpty) {
+              Navigator.of(context).pushReplacement(MaterialPageRoute(
+                builder: (context) {
+                  return HomeScreen();
+                },
+              ));
+              print("User is not null");
+            } else {
+              print("returned User has no name");
+            }
+          }).catchError((onError) {
+            print("Error on Google Signin: $onError");
+          });
         },
         shape: new RoundedRectangleBorder(
             borderRadius: new BorderRadius.circular(35.0)),
