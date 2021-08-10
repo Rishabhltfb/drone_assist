@@ -1,5 +1,6 @@
 import 'package:drone_assist/src/helper/themeData.dart';
 import 'package:drone_assist/src/providers/user_provider.dart';
+import 'package:drone_assist/src/screens/auth_screen.dart';
 import 'package:drone_assist/src/screens/home_screen.dart';
 import 'package:drone_assist/src/screens/tts_screen.dart';
 import 'package:drone_assist/src/screens/new_screen.dart';
@@ -20,10 +21,11 @@ class App extends StatelessWidget {
         theme: theme,
         routes: {
           '/': (BuildContext context) => HomeScreen(),
+          '/auth': (BuildContext context) => AuthScreen(),
           '/tts': (BuildContext context) => TTSScreen(),
           '/new': (BuildContext context) => NewPage(),
         },
-        initialRoute: '/',
+        initialRoute: '/auth',
       ),
     );
   }

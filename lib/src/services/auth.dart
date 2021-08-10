@@ -31,45 +31,34 @@ class AuthService {
     Map<String, dynamic> _tempUser = {};
     final User? currentUser = _auth.currentUser!;
     assert(user!.uid == currentUser!.uid);
-
+    print("Current User is: \t\t ${currentUser!.uid}");
     await _firestore
         .collection('/users')
-        .doc(currentUser!.uid)
+        .doc(currentUser.uid)
         .get()
         .then((snapshot) {
       if (snapshot.exists) {
-        _tempUser = snapshot.data as Map<String, dynamic>;
+        _tempUser = snapshot.data() as Map<String, dynamic>;
       } else {
         print("Signin: User Data doesn't exist in firestore!");
+        AppUser tempUser = new AppUser();
+        tempUser.name = user!.displayName!;
+        tempUser.email = user.email!;
+        tempUser.photoURL = user.photoURL!;
         _tempUser = {
-          'name': user!.displayName,
           'uid': user.uid,
+          'name': user.displayName,
           'email': user.email,
-          'profileImageUrl': user.photoURL,
-          'about': "",
-          'batch': "",
-          'contact': "",
-          'quote': "What quote describes you ?",
-          'cvLink': "",
-          'fbId': "",
-          'instaId': "",
-          'interests': "",
-          'branch': "",
-          'isAdmin': false,
-          'isMember': true,
-          'linkedinId': "",
-          'position': "N/A",
+          'photoURL': user.photoURL,
+          "checklistsId": [],
         };
         _firestore.collection('/users').doc(user.uid).set(_tempUser);
       }
+    }).onError((error, stackTrace) {
+      print("Error while Checking user doc: $error ");
     });
-    // Only taking the first part of the name, i.e., First Name
-    // if (name.contains(" ")) {
-    //   name = name.substring(0, name.indexOf(" "));
-    // }
 
     assert(!user!.isAnonymous);
-    assert(await user!.getIdToken() != null);
 
     return AppUser.fromMap(_tempUser);
   }
@@ -78,7 +67,8 @@ class AuthService {
     Map<String, dynamic> _tempUser = {};
     final User currentUser = _auth.currentUser!;
     bool isFound = false;
-    if (currentUser == null) {
+    print("Inside get Current User");
+    if (currentUser.displayName!.isEmpty) {
       return AppUser();
     } else {
       await _firestore
@@ -87,12 +77,14 @@ class AuthService {
           .get()
           .then((snapshot) {
         if (snapshot.exists) {
-          _tempUser = snapshot.data as Map<String, dynamic>;
+          _tempUser = snapshot.data() as Map<String, dynamic>;
           isFound = true;
         } else {
           print("User Data doesn't exist in firestore!");
           isFound = false;
         }
+      }).onError((error, stackTrace) {
+        print("Error while fetching Current User: $error");
       });
     }
     return isFound ? AppUser.fromMap(_tempUser) : AppUser();

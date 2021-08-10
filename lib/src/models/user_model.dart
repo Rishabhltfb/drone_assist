@@ -3,7 +3,7 @@ class AppUser {
   String name = "";
   String email = "";
   String photoURL = "";
-  List<String> checklistsId = [];
+  List<dynamic> checklistsId = [];
 
   AppUser({
     this.uid = "",
