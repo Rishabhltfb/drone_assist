@@ -1,7 +1,7 @@
 import 'package:drone_assist/src/helper/dimensions.dart';
 import 'package:drone_assist/src/providers/user_provider.dart';
 import 'package:drone_assist/src/screens/home_screen.dart';
-import 'package:drone_assist/src/services/auth.dart';
+import 'package:drone_assist/src/services/auth_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:provider/provider.dart';

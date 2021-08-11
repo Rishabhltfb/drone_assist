@@ -5,7 +5,9 @@ import 'package:drone_assist/src/models/user_model.dart';
 import 'package:drone_assist/src/providers/user_provider.dart';
 import 'package:drone_assist/src/screens/auth_screen.dart';
 import 'package:drone_assist/src/screens/checklist_screen.dart';
-import 'package:drone_assist/src/services/auth.dart';
+import 'package:drone_assist/src/screens/create_cheklist_screen.dart';
+import 'package:drone_assist/src/screens/profile_screen.dart';
+import 'package:drone_assist/src/services/auth_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:provider/provider.dart';
@@ -38,8 +40,20 @@ class _HomeScreenState extends State<HomeScreen> {
             child: Column(
               children: [
                 Row(
-                  mainAxisAlignment: MainAxisAlignment.end,
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
+                    IconButton(
+                        onPressed: () {
+                          Navigator.of(context).push(MaterialPageRoute(
+                            builder: (context) {
+                              return ProfileScreen();
+                            },
+                          ));
+                        },
+                        icon: Icon(
+                          Icons.account_circle_outlined,
+                          size: vpW * 0.1,
+                        )),
                     IconButton(
                         onPressed: () {
                           AuthService().signOutGoogle();
@@ -64,10 +78,6 @@ class _HomeScreenState extends State<HomeScreen> {
                             height: vpH * 0.2,
                             width: vpW * 0.2,
                           )),
-                      // Text(currAppUser.name),
-                      // Text(currAppUser.email),
-                      // Text(currAppUser.photoURL),
-                      // Text(currAppUser.uid),
                       SizedBox(
                         height: 15,
                       ),
@@ -136,7 +146,13 @@ class _HomeScreenState extends State<HomeScreen> {
           ),
         ),
         floatingActionButton: FloatingActionButton(
-          onPressed: () {},
+          onPressed: () {
+            Navigator.of(context).push(MaterialPageRoute(
+              builder: (context) {
+                return CreateChecklistScreen();
+              },
+            ));
+          },
           child: Icon(Icons.add),
         ),
       ),

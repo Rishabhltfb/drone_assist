@@ -3,6 +3,7 @@ List<Map<String, dynamic>> dummyChecklist = [
     "id": "askssd122",
     "title": "Pre-flight",
     "description": "this is a demo description.",
+    "priority": 1,
     "checkpoints": [
       "Turn on the controller",
       "check for sound and aviation",
@@ -12,6 +13,7 @@ List<Map<String, dynamic>> dummyChecklist = [
   {
     "id": "askssd232j",
     "title": "Mission Planning",
+    "priority": 2,
     "description": "this is a demo description.",
     "checkpoints": [
       "Turn on the controller",
@@ -22,6 +24,7 @@ List<Map<String, dynamic>> dummyChecklist = [
   {
     "id": "askssd111",
     "title": "Take-off",
+    "priority": 3,
     "description": "this is a demo description.",
     "checkpoints": [
       "Turn on the controller",
@@ -32,6 +35,7 @@ List<Map<String, dynamic>> dummyChecklist = [
   {
     "id": "ask1223122",
     "title": "THru-flight",
+    "priority": 4,
     "description": "this is a demo description.",
     "checkpoints": [
       "Turn on the controller",
@@ -42,6 +46,7 @@ List<Map<String, dynamic>> dummyChecklist = [
   {
     "id": "asksas22",
     "title": "Post-flight",
+    "priority": 5,
     "description": "this is a demo description.",
     "checkpoints": []
   },
