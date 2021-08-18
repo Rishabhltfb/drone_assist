@@ -18,6 +18,30 @@ class ChecklistService {
     return true;
   }
 
+  Future<bool> updateCheckList(CheckList checkList) async {
+    Map<String, dynamic> data =
+        checkList.toMap(checkList) as Map<String, dynamic>;
+    await _firestore
+        .collection("/checklists")
+        .doc(data['id'])
+        .update(data)
+        .then((_) {
+      print("Checklist updated Successfully");
+    }).onError((error, stackTrace) {
+      print("Error while Posting Checklist: $error");
+    });
+    return true;
+  }
+
+  Future<bool> deleteCheckList(String id) async {
+    await _firestore.collection("/checklists").doc(id).delete().then((_) {
+      print("Checklist updated Successfully");
+    }).onError((error, stackTrace) {
+      print("Error while Posting Checklist: $error");
+    });
+    return true;
+  }
+
   Future<List<CheckList>> fetchCheckLists() async {
     List<CheckList> list = [];
     await _firestore

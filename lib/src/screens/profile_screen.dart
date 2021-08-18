@@ -12,7 +12,12 @@ class ProfileScreen extends StatelessWidget {
     return Scaffold(
       body: Container(
         child: Center(
-          child: Text(appUser.name),
+          child: Column(children: [
+            Text(appUser.name),
+            Text(appUser.email),
+            Text(appUser.photoURL),
+            Text(appUser.uid),
+          ]),
         ),
       ),
     );

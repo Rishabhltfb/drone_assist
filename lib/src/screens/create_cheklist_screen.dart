@@ -1,4 +1,5 @@
 import 'package:drone_assist/src/helper/dimensions.dart';
+import 'package:drone_assist/src/services/checklist_service.dart';
 import 'package:flutter/material.dart';
 
 class CreateChecklistScreen extends StatefulWidget {
@@ -11,6 +12,9 @@ class CreateChecklistScreen extends StatefulWidget {
 class _CreateChecklistScreenState extends State<CreateChecklistScreen> {
   late double vpH, vpW;
   final _formKey = GlobalKey<FormState>();
+  ValueNotifier<List<String>> checkpointList = ValueNotifier<List<String>>([]);
+  ValueNotifier<String> currCheckpoint = ValueNotifier<String>("");
+
   Map<String, dynamic> data = {
     "title": "",
     "description": "",
@@ -30,13 +34,23 @@ class _CreateChecklistScreenState extends State<CreateChecklistScreen> {
         padding: EdgeInsets.symmetric(horizontal: 15.0, vertical: 12.0),
         onPressed: () async {
           if (_formKey.currentState!.validate()) {
+            _formKey.currentState!.save();
             // If the form is valid, display a snackbar. In the real world,
             // you'd often call a server or save the information in a database.
-            ScaffoldMessenger.of(context).showSnackBar(
-              const SnackBar(content: Text('Processing Data')),
-            );
+            print(data['title']);
+            print(data['description']);
+            data['checkpoints'] = checkpointList.value;
+            ChecklistService().postCheckList(data).then((success) {
+              if (success) {
+                Navigator.of(context).pop();
+              } else {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(
+                      content: Text('Unable to Create CheckList. Try Again!')),
+                );
+              }
+            });
           }
-          print("CheckList Created");
         },
         shape: new RoundedRectangleBorder(
             borderRadius: new BorderRadius.circular(35.0)),
@@ -55,36 +69,128 @@ class _CreateChecklistScreenState extends State<CreateChecklistScreen> {
     return SafeArea(
       child: Scaffold(
         body: SingleChildScrollView(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              Container(
-                width: vpW,
-              ),
-              Text(
-                "Create CheckList",
-                style: TextStyle(
-                  fontWeight: FontWeight.bold,
-                  fontSize: vpW * 0.065,
+          child: Padding(
+            padding: const EdgeInsets.all(15.0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                Container(
+                  width: vpW,
                 ),
-              ),
-              Form(
-                key: _formKey,
-                child: Column(
-                  children: <Widget>[
-                    // Add TextFormFields and ElevatedButton here.
-                    TextFormField(),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(vertical: 15),
-                      child: _button("Create CheckList", context, vpH),
-                    ),
-                  ],
+                Text(
+                  "Create CheckList",
+                  style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: vpW * 0.065,
+                  ),
                 ),
-              ),
-            ],
+                Form(
+                  key: _formKey,
+                  child: Column(
+                    children: <Widget>[
+                      TextFormField(
+                        initialValue: data["title"],
+                        decoration: const InputDecoration(
+                          icon: Icon(Icons.person),
+                          hintText: 'Enter the title for checklist',
+                          labelText: 'Title',
+                        ),
+                        validator: (value) {
+                          if (value == null || value.isEmpty) {
+                            return 'Please enter title';
+                          }
+                          return null;
+                        },
+                        onSaved: (newValue) {
+                          setState(() {
+                            data['title'] = newValue;
+                          });
+                        },
+                      ),
+                      TextFormField(
+                        initialValue: data["description"],
+                        decoration: const InputDecoration(
+                          icon: Icon(Icons.person),
+                          hintText: 'Enter the description for checklist',
+                          labelText: 'Description',
+                        ),
+                        validator: (value) {
+                          if (value == null || value.isEmpty) {
+                            return 'Please enter description';
+                          }
+                          return null;
+                        },
+                        onSaved: (newValue) {
+                          setState(() {
+                            data['description'] = newValue;
+                          });
+                        },
+                      ),
+                      // ValueListenableBuilder(
+                      //   valueListenable: checkpointList,
+                      //   builder: (context, value, child) => ListView.builder(
+                      //     itemCount: checkpointList.value.length,
+                      //     itemBuilder: (context, index) {
+                      //       String checkpoint = checkpointList.value[index];
+                      //       return ListTile(title: Text(checkpoint));
+                      //     },
+                      //   ),
+                      // ),
+                      Row(
+                        children: [
+                          Expanded(
+                            flex: 3,
+                            child: TextFormField(
+                              initialValue: "",
+                              decoration: const InputDecoration(
+                                icon: Icon(Icons.person),
+                                hintText: 'Add new checkpoint',
+                                labelText: 'Checkpoint',
+                              ),
+                              validator: (value) {
+                                if (value == null || value.isEmpty) {
+                                  return 'Please enter checkpoint';
+                                }
+                                return null;
+                              },
+                            ),
+                          ),
+                          Expanded(
+                            flex: 1,
+                            child: ValueListenableBuilder(
+                              valueListenable: currCheckpoint,
+                              builder: (context, value, child) => IconButton(
+                                  onPressed: () {
+                                    if (currCheckpoint.value.isNotEmpty) {
+                                      checkpointList.value =
+                                          List.from(checkpointList.value)
+                                            ..add(currCheckpoint.value);
+                                    }
+                                  },
+                                  icon: Icon(Icons.add)),
+                            ),
+                          ),
+                        ],
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(vertical: 45),
+                        child: _button("Create CheckList", context, vpH),
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
           ),
         ),
       ),
     );
+  }
+
+  @override
+  void dispose() {
+    checkpointList.dispose();
+
+    super.dispose();
   }
 }
