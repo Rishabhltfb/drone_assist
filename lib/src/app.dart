@@ -1,4 +1,5 @@
 import 'package:drone_assist/src/helper/themeData.dart';
+import 'package:drone_assist/src/providers/checklist_provider.dart';
 import 'package:drone_assist/src/providers/user_provider.dart';
 import 'package:drone_assist/src/screens/auth_screen.dart';
 import 'package:drone_assist/src/screens/home_screen.dart';
@@ -14,6 +15,7 @@ class App extends StatelessWidget {
     return MultiProvider(
       providers: [
         ChangeNotifierProvider(create: (ctx) => UserProvider()),
+        ChangeNotifierProvider(create: (ctx) => ChecklistProvider()),
       ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,

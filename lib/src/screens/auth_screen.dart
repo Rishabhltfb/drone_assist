@@ -49,6 +49,7 @@ class _AuthScreenState extends State<AuthScreen> {
               print("returned User has no name");
             }
           }).catchError((onError) {
+            _isLoading.value = false;
             print("Error on Google Signin: $onError");
           });
         },

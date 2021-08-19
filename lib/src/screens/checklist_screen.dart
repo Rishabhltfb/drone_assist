@@ -1,4 +1,3 @@
-import 'package:drone_assist/src/dialogs/delete_dialog.dart';
 import 'package:drone_assist/src/helper/dimensions.dart';
 import 'package:drone_assist/src/models/checklist_model.dart';
 import 'package:drone_assist/src/screens/tts_screen.dart';
@@ -58,6 +57,7 @@ class _CheckListScreenState extends State<CheckListScreen> {
                   itemCount: widget.checkList.checkpoints.length,
                   itemBuilder: (context, index) {
                     String checkPoint = widget.checkList.checkpoints[index];
+                    String id = widget.checkList.id;
                     return Padding(
                       padding: const EdgeInsets.symmetric(
                           vertical: 4.0, horizontal: 8),
@@ -69,7 +69,7 @@ class _CheckListScreenState extends State<CheckListScreen> {
                           tileColor: Colors.white,
                           title: Text(checkPoint),
                           onLongPress: () {
-                            showDeleteDialog(context, checkPoint);
+                            // showDeleteDialog(context, checkPoint, id);
                           },
                           onTap: () {
                             currIndex.value = currIndex.value + 1;

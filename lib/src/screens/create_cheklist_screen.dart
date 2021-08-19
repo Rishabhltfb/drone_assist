@@ -14,6 +14,7 @@ class _CreateChecklistScreenState extends State<CreateChecklistScreen> {
   final _formKey = GlobalKey<FormState>();
   ValueNotifier<List<String>> checkpointList = ValueNotifier<List<String>>([]);
   ValueNotifier<String> currCheckpoint = ValueNotifier<String>("");
+  TextEditingController checkPointController = new TextEditingController();
 
   Map<String, dynamic> data = {
     "title": "",
@@ -126,32 +127,42 @@ class _CreateChecklistScreenState extends State<CreateChecklistScreen> {
                           });
                         },
                       ),
-                      // ValueListenableBuilder(
-                      //   valueListenable: checkpointList,
-                      //   builder: (context, value, child) => ListView.builder(
-                      //     itemCount: checkpointList.value.length,
-                      //     itemBuilder: (context, index) {
-                      //       String checkpoint = checkpointList.value[index];
-                      //       return ListTile(title: Text(checkpoint));
-                      //     },
-                      //   ),
-                      // ),
+                      ValueListenableBuilder(
+                        valueListenable: checkpointList,
+                        builder: (context, value, child) => ListView.builder(
+                          itemCount: checkpointList.value.length,
+                          shrinkWrap: true,
+                          itemBuilder: (context, index) {
+                            String checkpoint = checkpointList.value[index];
+                            return ListTile(
+                              title: Text(checkpoint),
+                              leading: Text((index + 1).toString()),
+                              trailing: IconButton(
+                                  onPressed: () {
+                                    checkpointList.value =
+                                        List.from(checkpointList.value)
+                                          ..removeWhere((element) {
+                                            return element == checkpoint;
+                                          });
+                                  },
+                                  icon: Icon(Icons.delete)),
+                            );
+                          },
+                        ),
+                      ),
                       Row(
                         children: [
                           Expanded(
                             flex: 3,
                             child: TextFormField(
-                              initialValue: "",
+                              controller: checkPointController,
                               decoration: const InputDecoration(
                                 icon: Icon(Icons.person),
                                 hintText: 'Add new checkpoint',
                                 labelText: 'Checkpoint',
                               ),
-                              validator: (value) {
-                                if (value == null || value.isEmpty) {
-                                  return 'Please enter checkpoint';
-                                }
-                                return null;
+                              onChanged: (value) {
+                                currCheckpoint.value = value;
                               },
                             ),
                           ),
@@ -165,6 +176,11 @@ class _CreateChecklistScreenState extends State<CreateChecklistScreen> {
                                       checkpointList.value =
                                           List.from(checkpointList.value)
                                             ..add(currCheckpoint.value);
+                                      print("Added checkpoint");
+                                      currCheckpoint.value = "";
+                                      checkPointController.clear();
+                                    } else {
+                                      print("In else block");
                                     }
                                   },
                                   icon: Icon(Icons.add)),

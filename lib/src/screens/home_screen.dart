@@ -1,11 +1,10 @@
+import 'package:drone_assist/src/dialogs/delete_dialog.dart';
 import 'package:drone_assist/src/helper/dimensions.dart';
 import 'package:drone_assist/src/models/checklist_model.dart';
-import 'package:drone_assist/src/models/user_model.dart';
-import 'package:drone_assist/src/providers/user_provider.dart';
+import 'package:drone_assist/src/providers/checklist_provider.dart';
 import 'package:drone_assist/src/screens/auth_screen.dart';
 import 'package:drone_assist/src/screens/checklist_screen.dart';
 import 'package:drone_assist/src/screens/create_cheklist_screen.dart';
-import 'package:drone_assist/src/screens/profile_screen.dart';
 import 'package:drone_assist/src/services/auth_service.dart';
 import 'package:drone_assist/src/services/checklist_service.dart';
 import 'package:flutter/material.dart';
@@ -22,15 +21,27 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   late double vpH, vpW;
   ValueNotifier<List<CheckList>> checkList = ValueNotifier<List<CheckList>>([]);
+
+  void fetchCheckList() {
+    ChecklistService().fetchCheckLists().then((fetchedList) {
+      Provider.of<ChecklistProvider>(context, listen: false).setChecklists =
+          fetchedList;
+    });
+  }
+
+  @override
+  void dispose() {
+    checkList.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     vpH = getViewportHeight(context);
     vpW = getViewportWidth(context);
-    AppUser currAppUser = Provider.of<UserProvider>(context).getUser;
-    ChecklistService().fetchCheckLists().then((fetchedList) {
-      // checkList.value = fetchedList;
-      checkList.value = new List.from(fetchedList);
-    });
+    fetchCheckList();
+
+    checkList.value = Provider.of<ChecklistProvider>(context).getChecklists;
     // dummyChecklist.forEach((element) {
     //   checkList.value.add(CheckList.fromMap(element));
     // });
@@ -133,7 +144,10 @@ class _HomeScreenState extends State<HomeScreen> {
                                   tileColor: Colors.white,
                                   title: Text(currCheckList.title),
                                   subtitle: Text(currCheckList.description),
-                                  onLongPress: () {},
+                                  onLongPress: () {
+                                    showDeleteDialog(context,
+                                        currCheckList.title, currCheckList.id);
+                                  },
                                   onTap: () {
                                     Navigator.of(context)
                                         .push(MaterialPageRoute(

@@ -1,7 +1,10 @@
 import 'package:drone_assist/src/helper/dimensions.dart';
+import 'package:drone_assist/src/providers/checklist_provider.dart';
+import 'package:drone_assist/src/services/checklist_service.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
-void showDeleteDialog(context, String checkpoint) {
+void showDeleteDialog(context, String checklist, String id) {
   double vpH = getViewportHeight(context);
   double vpW = getViewportWidth(context);
   showDialog(
@@ -19,7 +22,7 @@ void showDeleteDialog(context, String checkpoint) {
         content: RichText(
           textAlign: TextAlign.center,
           text: TextSpan(
-              text: 'Delete Checkpoint!',
+              text: 'Delete CheckList!',
               style: TextStyle(
                 fontFamily: "Averia Serif Libre",
                 fontSize: vpW * 0.05,
@@ -29,7 +32,7 @@ void showDeleteDialog(context, String checkpoint) {
               children: [
                 TextSpan(
                   text:
-                      '\n\nAre you sure you want to delete `$checkpoint` checkpoint.',
+                      '\n\nAre you sure you want to delete `$checklist` checklist.',
                   style: TextStyle(
                     fontSize: vpW * 0.04,
                     fontWeight: FontWeight.normal,
@@ -47,7 +50,9 @@ void showDeleteDialog(context, String checkpoint) {
                 fontFamily: "Averia Serif Libre",
               ),
             ),
-            onPressed: () {},
+            onPressed: () {
+              Navigator.of(context).pop();
+            },
           ),
           TextButton(
             child: Text(
@@ -55,7 +60,21 @@ void showDeleteDialog(context, String checkpoint) {
               style: TextStyle(
                   fontFamily: "Averia Serif Libre", color: Colors.red),
             ),
-            onPressed: () {},
+            onPressed: () {
+              ChecklistService().deleteCheckList(id).then((success) {
+                if (success) {
+                  ChecklistService().fetchCheckLists().then((fetchedList) {
+                    // checkList.value = fetchedList;
+                    Provider.of<ChecklistProvider>(context, listen: false)
+                        .setChecklists = fetchedList;
+                    // checkList.value = new List.from(fetchedList);
+                  });
+                  Navigator.of(context).pop();
+                } else {
+                  print("Unable to delete checklist: $checklist");
+                }
+              });
+            },
           ),
         ],
       );
