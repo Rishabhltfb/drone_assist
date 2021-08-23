@@ -1,6 +1,7 @@
 import 'package:drone_assist/src/helper/dimensions.dart';
 import 'package:drone_assist/src/models/checklist_model.dart';
 import 'package:drone_assist/src/screens/tts_screen.dart';
+import 'package:drone_assist/src/services/tts_service.dart';
 import 'package:flutter/material.dart';
 
 class CheckListScreen extends StatefulWidget {
@@ -15,11 +16,20 @@ class _CheckListScreenState extends State<CheckListScreen> {
   ValueNotifier<int> currIndex = ValueNotifier<int>(0);
   late double vpH, vpW;
   ValueNotifier<bool> start = ValueNotifier<bool>(false);
+  late TTSService ttsService;
+  String name = "Rishabh";
+
+  @override
+  void initState() {
+    ttsService = TTSService();
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
     vpH = getViewportHeight(context);
     vpW = getViewportWidth(context);
+    CheckList checkList = widget.checkList;
     return SafeArea(
         child: Scaffold(
       body: SingleChildScrollView(
@@ -32,7 +42,7 @@ class _CheckListScreenState extends State<CheckListScreen> {
                   height: vpH * 0.05,
                 ),
                 Text(
-                  widget.checkList.title,
+                  checkList.title,
                   style: TextStyle(fontSize: vpW * 0.08),
                 ),
                 Padding(
@@ -46,7 +56,7 @@ class _CheckListScreenState extends State<CheckListScreen> {
                             (currIndex.value).toString() +
                                 "   Completed Checkpoints"),
                       ),
-                      Text(widget.checkList.checkpoints.length.toString() +
+                      Text(checkList.checkpoints.length.toString() +
                           "    Total Checkpoints"),
                     ],
                   ),
@@ -54,10 +64,10 @@ class _CheckListScreenState extends State<CheckListScreen> {
                 ListView.builder(
                   primary: false,
                   shrinkWrap: true,
-                  itemCount: widget.checkList.checkpoints.length,
+                  itemCount: checkList.checkpoints.length,
                   itemBuilder: (context, index) {
-                    String checkPoint = widget.checkList.checkpoints[index];
-                    // String id = widget.checkList.id;
+                    String checkPoint = checkList.checkpoints[index];
+                    // String id = checkList.id;
                     return Padding(
                       padding: const EdgeInsets.symmetric(
                           vertical: 4.0, horizontal: 8),
@@ -106,16 +116,12 @@ class _CheckListScreenState extends State<CheckListScreen> {
                   right: 10,
                   child: OutlinedButton(
                       onPressed: () {
-                        Navigator.of(context).push(MaterialPageRoute(
-                          builder: (context) {
-                            return TTSScreen();
-                          },
-                        ));
-                        // print("Button pressed");
-                        // start.value = true;
-                        // currIndex.value = currIndex.value + 1;
+                        start.value = !start.value;
+
+                        ttsService.speak(
+                            "Hey $name ! We will be going through ${checkList.title} checklist in 5 seconds.");
                       },
-                      child: Text(start.value ? "Resume" : "Start"))),
+                      child: Text(start.value ? "Stop" : "Start"))),
             ),
           ],
         ),

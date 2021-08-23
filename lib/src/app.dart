@@ -47,7 +47,6 @@ class App extends StatelessWidget {
     if (user != null &&
         FirebaseAuth.instance.currentUser!.emailVerified == true) {
       print("user is logged in");
-      print(user);
       return HomeScreen();
     } else {
       print("user is not logged in");
