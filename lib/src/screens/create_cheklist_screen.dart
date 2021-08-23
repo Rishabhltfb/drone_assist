@@ -70,6 +70,7 @@ class _CreateChecklistScreenState extends State<CreateChecklistScreen> {
     return SafeArea(
       child: Scaffold(
         body: SingleChildScrollView(
+          primary: true,
           child: Padding(
             padding: const EdgeInsets.all(15.0),
             child: Column(
@@ -130,6 +131,7 @@ class _CreateChecklistScreenState extends State<CreateChecklistScreen> {
                       ValueListenableBuilder(
                         valueListenable: checkpointList,
                         builder: (context, value, child) => ListView.builder(
+                          primary: false,
                           itemCount: checkpointList.value.length,
                           shrinkWrap: true,
                           itemBuilder: (context, index) {

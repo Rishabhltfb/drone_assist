@@ -57,7 +57,7 @@ class _CheckListScreenState extends State<CheckListScreen> {
                   itemCount: widget.checkList.checkpoints.length,
                   itemBuilder: (context, index) {
                     String checkPoint = widget.checkList.checkpoints[index];
-                    String id = widget.checkList.id;
+                    // String id = widget.checkList.id;
                     return Padding(
                       padding: const EdgeInsets.symmetric(
                           vertical: 4.0, horizontal: 8),
