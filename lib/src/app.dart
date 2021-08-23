@@ -3,8 +3,6 @@ import 'package:drone_assist/src/providers/checklist_provider.dart';
 import 'package:drone_assist/src/providers/user_provider.dart';
 import 'package:drone_assist/src/screens/auth_screen.dart';
 import 'package:drone_assist/src/screens/home_screen.dart';
-import 'package:drone_assist/src/screens/tts_screen.dart';
-import 'package:drone_assist/src/screens/new_screen.dart';
 import 'package:drone_assist/src/utils/app_utils.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
