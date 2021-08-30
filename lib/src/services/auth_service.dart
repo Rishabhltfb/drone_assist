@@ -28,6 +28,10 @@ class AuthService {
     assert(user!.displayName != null);
     assert(user!.photoURL != null);
 
+    return getUserFromDb(user);
+  }
+
+  Future<AppUser> getUserFromDb(User? user) async {
     Map<String, dynamic> _tempUser = {};
     final User? currentUser = _auth.currentUser!;
     assert(user!.uid == currentUser!.uid);
@@ -62,6 +66,7 @@ class AuthService {
 
     return AppUser.fromMap(_tempUser);
   }
+
 
   Future<AppUser> getCurrentUser() async {
     Map<String, dynamic> _tempUser = {};

@@ -3,6 +3,7 @@ import 'package:drone_assist/src/providers/checklist_provider.dart';
 import 'package:drone_assist/src/providers/user_provider.dart';
 import 'package:drone_assist/src/screens/auth_screen.dart';
 import 'package:drone_assist/src/screens/home_screen.dart';
+import 'package:drone_assist/src/services/auth_service.dart';
 import 'package:drone_assist/src/utils/app_utils.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -26,24 +27,21 @@ class App extends StatelessWidget {
             home: homeScreen(context, snapshot),
           );
         },
-        // routes: {
-        //   '/': (BuildContext context) => HomeScreen(),
-        //   '/auth': (BuildContext context) => AuthScreen(),
-        //   '/tts': (BuildContext context) => TTSScreen(),
-        //   '/new': (BuildContext context) => NewPage(),
-        // },
-        // initialRoute: '/auth',
       ),
     );
   }
 
   Widget homeScreen(BuildContext context, AsyncSnapshot<Object?> snapshot) {
+    print("AuthScreen Check");
     if (snapshot.connectionState != ConnectionState.active) {
       return Center(child: CircularProgressIndicator());
     }
     final user = snapshot.data;
-    if (user != null &&
-        FirebaseAuth.instance.currentUser!.emailVerified == true) {
+    User? currUser = FirebaseAuth.instance.currentUser;
+    if (user != null && currUser!.emailVerified == true) {
+      AuthService().getUserFromDb(currUser).then((authUser) {
+        Provider.of<UserProvider>(context, listen: false).setUser = authUser;
+      });
       print("user is logged in");
       return HomeScreen();
     } else {
