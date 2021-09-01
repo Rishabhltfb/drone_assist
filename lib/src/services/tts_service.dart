@@ -7,14 +7,14 @@ enum TtsState { playing, stopped, paused, continued }
 
 class TTSService {
   String _language = "en-US";
-  String? _engine;
+  // String? _engine;
   double _volume = 1.0;
   double _pitch = 1.0;
   double _rate = 1.0;
-  bool _isCurrentLanguageInstalled = false;
+  // bool _isCurrentLanguageInstalled = false;
 
   String? _newVoiceText;
-  int? _inputLength;
+  // int? _inputLength;
   FlutterTts flutterTts = FlutterTts();
 
   TtsState _ttsState = TtsState.stopped;

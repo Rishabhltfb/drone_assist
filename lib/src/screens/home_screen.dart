@@ -5,6 +5,7 @@ import 'package:drone_assist/src/providers/checklist_provider.dart';
 import 'package:drone_assist/src/screens/auth_screen.dart';
 import 'package:drone_assist/src/screens/checklist_screen.dart';
 import 'package:drone_assist/src/screens/create_cheklist_screen.dart';
+import 'package:drone_assist/src/screens/profile_screen.dart';
 import 'package:drone_assist/src/services/auth_service.dart';
 import 'package:drone_assist/src/services/checklist_service.dart';
 import 'package:flutter/material.dart';
@@ -61,12 +62,12 @@ class _HomeScreenState extends State<HomeScreen> {
                     children: [
                       IconButton(
                           onPressed: () {
-                            setState(() {});
-                            // Navigator.of(context).push(MaterialPageRoute(
-                            //   builder: (context) {
-                            //     return ProfileScreen();
-                            //   },
-                            // ));
+                            // setState(() {});
+                            Navigator.of(context).push(MaterialPageRoute(
+                              builder: (context) {
+                                return ProfileScreen();
+                              },
+                            ));
                           },
                           icon: Icon(
                             Icons.account_circle_outlined,

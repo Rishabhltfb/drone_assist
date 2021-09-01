@@ -2,10 +2,13 @@ import 'dart:async';
 
 import 'package:drone_assist/src/helper/dimensions.dart';
 import 'package:drone_assist/src/models/checklist_model.dart';
+import 'package:drone_assist/src/models/user_model.dart';
+import 'package:drone_assist/src/providers/user_provider.dart';
 import 'package:drone_assist/src/services/stt_service.dart';
 import 'package:drone_assist/src/services/tts_service.dart';
+import 'package:drone_assist/src/utils/speech_words.dart';
 import 'package:flutter/material.dart';
-import 'package:speech_to_text/speech_to_text.dart' as stt;
+import 'package:provider/provider.dart';
 
 class CheckListScreen extends StatefulWidget {
   final CheckList checkList;
@@ -19,60 +22,78 @@ class _CheckListScreenState extends State<CheckListScreen> {
   ValueNotifier<int> currIndex = ValueNotifier<int>(0);
   late double vpH, vpW;
   ValueNotifier<bool> start = ValueNotifier<bool>(false);
-  late TTSService ttsService;
-  late STTService sttService;
-  String name = "Rishabh";
+  ValueNotifier<bool> _isListening = ValueNotifier<bool>(false);
+  TTSService ttsService = TTSService();
+  SpeechApi sttService = SpeechApi();
+  String name = "User";
 
   // For STT Service
 
-  late stt.SpeechToText _speech;
-  bool _isListening = false;
   String _text = "";
-  double _confidence = 1.0;
+  // double _confidence = 1.0;
 
   bool available = false;
 
   @override
   void initState() {
-    ttsService = TTSService();
-    _speech = stt.SpeechToText();
+    AppUser appUser = Provider.of<UserProvider>(context, listen: false).getUser;
+    name = appUser.name.isNotEmpty ? appUser.name : "User";
     super.initState();
   }
 
-  void _listen() async {
-    print("Listen function started");
-    if (!_isListening) {
-      bool available = await _speech.initialize(
-        onStatus: (val) {
-          print('onStatus: $val');
-          if (val == "listening") {
-          } else {
-            setState(() {
-              _speech.stop();
-              Timer(Duration(seconds: 1), () {
-                print("Final text is: $_text");
-              });
+  Future toggleRecording() => SpeechApi.toggleRecording(
+        onResult: (text) {
+          setState(() {
+            // print("result from onResult is $text");
+            this._text = text;
+          });
+        },
+        onListening: (value) async {
+          if (_isListening.value && !value) {
+    print("Step3");
+            print("Listening is complete by the api: ${this._text}");
+            await ttsService.speak("Analysing response").whenComplete(() async {
+    print("Step4");
+              bool res;
+              res = interpretResponse(this._text);
+              print("res of interpreter is : $res");
+              if (res) {
+    print("Step5");
+                if (currIndex.value !=
+                    widget.checkList.checkpoints.length - 1) {
+    print("Step6");
+                  currIndex.value = currIndex.value + 1;
+                  await ttsService
+                      .speak(
+                          "Checkpoint Marked Completed. Moving forward to next checkpoint")
+                      .whenComplete(() => _listen());
+                } else {
+    print("Step6-");
+                  print("In else block for currIndex");
+                  // TODO: launch end checkpoint callback
+                }
+              } else {
+    print("Step5-");
+                ttsService.speak(
+                    "It seems not to be done yet! Let's try again after 10 seconds.");
+                Timer(Duration(seconds: 10), _listen);
+              }
             });
           }
+          this._isListening.value = value;
         },
-        onError: (val) => print('onError: $val'),
       );
-      if (available) {
-        setState(() => _isListening = true);
-        _speech.listen(
-          onResult: (val) => setState(() {
-            _text = val.recognizedWords;
-            if (val.hasConfidenceRating && val.confidence > 0) {
-              _confidence = val.confidence;
-            }
-          }),
-        );
-      }
-    } else {
-      setState(() => _isListening = false);
-      _speech.stop();
-    }
-    print("Listen function ends");
+
+  void _listen() async {
+    print("Step1");
+    await ttsService
+        .speak("Current Checkpoint is " +
+            widget.checkList.checkpoints[currIndex.value] +
+            ", is it done?")
+        .whenComplete(() async {
+    print("Step2");
+      await toggleRecording();
+    });
   }
 
   @override
@@ -125,37 +146,45 @@ class _CheckListScreenState extends State<CheckListScreen> {
                         color: Colors.white,
                         shadowColor: Colors.blue.withOpacity(0.3),
                         elevation: 2.0,
-                        child: ListTile(
-                          tileColor: Colors.white,
-                          title: Text(checkPoint),
-                          onLongPress: () {
-                            // showDeleteDialog(context, checkPoint, id);
-                          },
-                          onTap: () {
-                            // currIndex.value = currIndex.value + 1;
-                            _listen();
-                          },
-                          trailing: ValueListenableBuilder(
+                        child: ValueListenableBuilder(
                             valueListenable: currIndex,
-                            builder: (context, value, child) => Icon(
-                              currIndex.value == index
-                                  ? Icons.play_circle_outline_rounded
-                                  : (currIndex.value > index
-                                      ? Icons.done_all_sharp
-                                      : Icons.done),
-                              color: currIndex.value == index
-                                  ? Colors.yellow[600]
-                                  : (currIndex.value > index
-                                      ? Colors.green
-                                      : Colors.grey),
-                            ),
+                            builder: (context, value, child) =>  ListTile(
+                            tileColor: Colors.white,
+                            title: Text(checkPoint),
+                            onLongPress: () {
+                              // showDeleteDialog(context, checkPoint, id);
+                            },
+                            onTap: () {
+                              if(currIndex.value == index){
+                              _listen();
+                              }
+                            },
+                            trailing: Icon(
+                                currIndex.value == index
+                                    ? Icons.play_circle_outline_rounded
+                                    : (currIndex.value > index
+                                        ? Icons.done_all_sharp
+                                        : Icons.done),
+                                color: currIndex.value == index
+                                    ? Colors.yellow[600]
+                                    : (currIndex.value > index
+                                        ? Colors.green
+                                        : Colors.grey),
+                              ),
+                            
                           ),
                         ),
                       ),
                     );
                   },
                 ),
-                Text(_text),
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Text(
+                    _text,
+                    textAlign: TextAlign.center,
+                  ),
+                ),
               ],
             ),
             Positioned(
@@ -169,9 +198,10 @@ class _CheckListScreenState extends State<CheckListScreen> {
                   child: OutlinedButton(
                       onPressed: () {
                         start.value = !start.value;
-
-                        ttsService.speak(
-                            "Hey $name ! We will be going through ${checkList.title} checklist in 5 seconds.");
+                        if (start.value) {
+                          ttsService.speak(
+                              "Hey $name ! We will be going through ${checkList.title} checklist in 5 seconds.");
+                        }
                       },
                       child: Text(start.value ? "Stop" : "Start"))),
             ),
@@ -184,6 +214,27 @@ class _CheckListScreenState extends State<CheckListScreen> {
   @override
   void dispose() {
     currIndex.dispose();
+    _isListening.dispose();
+    start.dispose();
     super.dispose();
+  }
+
+  bool interpretResponse(String text) {
+    print("Interpreting text: $text");
+    List<String> words = text.toLowerCase().split(" ");
+    bool positive = false;
+    for (int i = 0; i < words.length && !positive; i++) {
+      for (int j = 0; j < words.length; j++) {
+        if (positiveResponse[i] == words[j]) {
+          positive = true;
+          print(positiveResponse[i] + " matched " + words[j]);
+          break;
+        } else {
+          print(positiveResponse[i] + " Not Matched " + words[j]);
+        }
+      }
+    }
+    // print("interpret response is $positive");
+    return positive;
   }
 }
