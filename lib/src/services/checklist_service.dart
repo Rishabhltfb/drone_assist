@@ -42,11 +42,10 @@ class ChecklistService {
     return true;
   }
 
-  Future<List<CheckList>> fetchCheckLists() async {
+  Future<List<CheckList>> fetchCheckLists(String uid) async {
     List<CheckList> list = [];
     await _firestore
-        .collection("/checklists")
-        .orderBy('priority', descending: true)
+        .collection("/checklists").where('userid', isEqualTo: uid)
         .get()
         .then((value) {
       value.docs.forEach((element) {

@@ -82,7 +82,7 @@ class UserInfo extends StatelessWidget {
                                 horizontal: 12, vertical: 4),
                             leading: Icon(Icons.my_location),
                             title: Text("Location"),
-                            subtitle: Text("Aligarh, India"),
+                            subtitle: Text("Canada"),
                           ),
                           ListTile(
                             leading: Icon(Icons.email),

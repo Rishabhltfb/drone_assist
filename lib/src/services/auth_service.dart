@@ -54,7 +54,6 @@ class AuthService {
           'name': user.displayName,
           'email': user.email,
           'photoURL': user.photoURL,
-          "checklistsId": [],
         };
         _firestore.collection('/users').doc(user.uid).set(_tempUser);
       }

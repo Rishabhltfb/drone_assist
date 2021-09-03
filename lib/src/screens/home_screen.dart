@@ -1,7 +1,9 @@
 import 'package:drone_assist/src/dialogs/delete_dialog.dart';
 import 'package:drone_assist/src/helper/dimensions.dart';
 import 'package:drone_assist/src/models/checklist_model.dart';
+import 'package:drone_assist/src/models/user_model.dart';
 import 'package:drone_assist/src/providers/checklist_provider.dart';
+import 'package:drone_assist/src/providers/user_provider.dart';
 import 'package:drone_assist/src/screens/auth_screen.dart';
 import 'package:drone_assist/src/screens/checklist_screen.dart';
 import 'package:drone_assist/src/screens/create_cheklist_screen.dart';
@@ -24,7 +26,8 @@ class _HomeScreenState extends State<HomeScreen> {
   ValueNotifier<List<CheckList>> checkList = ValueNotifier<List<CheckList>>([]);
 
   void fetchCheckList() {
-    ChecklistService().fetchCheckLists().then((fetchedList) {
+    AppUser user = Provider.of<UserProvider>(context, listen: false).getUser;
+    ChecklistService().fetchCheckLists(user.uid).then((fetchedList) {
       Provider.of<ChecklistProvider>(context, listen: false).setChecklists =
           fetchedList;
     });
@@ -41,11 +44,7 @@ class _HomeScreenState extends State<HomeScreen> {
     vpH = getViewportHeight(context);
     vpW = getViewportWidth(context);
     fetchCheckList();
-
     checkList.value = Provider.of<ChecklistProvider>(context).getChecklists;
-    // dummyChecklist.forEach((element) {
-    //   checkList.value.add(CheckList.fromMap(element));
-    // });
     return SafeArea(
       child: Scaffold(
         body: Scrollbar(

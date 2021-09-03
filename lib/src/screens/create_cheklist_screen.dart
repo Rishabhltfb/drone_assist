@@ -1,6 +1,9 @@
 import 'package:drone_assist/src/helper/dimensions.dart';
+import 'package:drone_assist/src/models/user_model.dart';
+import 'package:drone_assist/src/providers/user_provider.dart';
 import 'package:drone_assist/src/services/checklist_service.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class CreateChecklistScreen extends StatefulWidget {
   const CreateChecklistScreen({Key? key}) : super(key: key);
@@ -36,11 +39,9 @@ class _CreateChecklistScreenState extends State<CreateChecklistScreen> {
         onPressed: () async {
           if (_formKey.currentState!.validate()) {
             _formKey.currentState!.save();
-            // If the form is valid, display a snackbar. In the real world,
-            // you'd often call a server or save the information in a database.
-            print(data['title']);
-            print(data['description']);
             data['checkpoints'] = checkpointList.value;
+            AppUser user = Provider.of<UserProvider>(context, listen: false).getUser;
+            data['userid'] = user.uid;
             ChecklistService().postCheckList(data).then((success) {
               if (success) {
                 Navigator.of(context).pop();

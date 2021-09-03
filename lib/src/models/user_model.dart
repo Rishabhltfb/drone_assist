@@ -3,14 +3,12 @@ class AppUser {
   String name = "";
   String email = "";
   String photoURL = "";
-  List<dynamic> checklistsId = [];
 
   AppUser({
     this.uid = "",
     this.name = "",
     this.email = "",
     this.photoURL = "",
-    this.checklistsId = const [],
   });
 
   Map toMap(AppUser user) {
@@ -19,7 +17,6 @@ class AppUser {
     data['name'] = user.name;
     data['email'] = user.email;
     data['photoURL'] = user.photoURL;
-    data["checklistsId"] = user.checklistsId;
 
     return data;
   }
@@ -31,7 +28,6 @@ class AppUser {
       this.name = mapData['name'];
       this.email = mapData['email'];
       this.photoURL = mapData['photoURL'];
-      this.checklistsId = mapData['checklistsId'];
     } catch (err) {
       print('Error in Converting User from Map: $err');
     }

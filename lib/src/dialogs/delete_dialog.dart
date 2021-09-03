@@ -1,5 +1,7 @@
 import 'package:drone_assist/src/helper/dimensions.dart';
+import 'package:drone_assist/src/models/user_model.dart';
 import 'package:drone_assist/src/providers/checklist_provider.dart';
+import 'package:drone_assist/src/providers/user_provider.dart';
 import 'package:drone_assist/src/services/checklist_service.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -63,7 +65,9 @@ void showDeleteDialog(context, String checklist, String id) {
             onPressed: () {
               ChecklistService().deleteCheckList(id).then((success) {
                 if (success) {
-                  ChecklistService().fetchCheckLists().then((fetchedList) {
+
+    AppUser user = Provider.of<UserProvider>(context, listen: false).getUser;
+                  ChecklistService().fetchCheckLists(user.uid).then((fetchedList) {
                     // checkList.value = fetchedList;
                     Provider.of<ChecklistProvider>(context, listen: false)
                         .setChecklists = fetchedList;

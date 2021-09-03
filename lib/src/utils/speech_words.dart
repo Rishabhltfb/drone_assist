@@ -7,11 +7,3 @@ List<String> negativeResponse = [
   "Nah",
   "Nope"
 ];
-
-
-// Yeah, the task is completed
-// Yeah, the , task , is , completed (affirmative)
-
-// voice recognizer - [manual touch, code]
-// wait = 5mins
-// wait = 
